@@ -1,0 +1,298 @@
+CPU
+===
+
+RR
+struct rr{
+int pid; int atime; int btime; int ctime;
+int tat; int wtime;}p[10],temp;
+void main(){
+int n,i=0,ts,rt[10],time=0,remain;
+float ttat=0,twt=0;
+printf("Enter the number of process");
+scanf("%d",&n);
+printf("Enter the time slice process");
+scanf("%d",&ts);
+for(int j=0;j<n;j++){
+p[j].pid=j;
+printf("Enter the arival time of
+P%d",j);
+scanf("%d",&p[j].atime);
+printf("Enter the burst time of
+P%d",j);
+scanf("%d",&p[j].btime);
+rt[j]=p[j].btime; }remain=n;
+while(remain!=0){
+if(rt[i]<=ts && rt[i]>0){
+time=time+rt[i];
+rt[i]=0;
+remain=remain-1;
+p[i].ctime=time;
+p[i].tat=time-p[i].atime;
+ttat=ttat+p[i].tat;
+p[i].wtime=p[i].tat-p[i].btime;
+twt=twt+p[i].wtime;}
+else if(rt[i]>0){
+rt[i]=rt[i]-ts;
+time=time+ts; }
+if(i==n-1){
+i=0;
+}else if(p[i+1].atime<=time){
+i=i+1;
+}else{
+i=0;} }
+printf("\n pid \t atime \t Btime \t ctime \t
+tat \t wating \t \n");
+for(int i=0;i<n;i++){
+printf("\n %d \t %d \t %d \t %d \t %d \t
+%d \t \n
+",p[i].pid,p[i].atime,p[i].btime,p[i].ctime,p[
+i].tat,p[i].wtime); }
+printf("\n Average TurnAroundTime %f
+\n Average Waiting Time
+%f\n",ttat/n,twt/n);
+}
+
+
+Priority
+struct pri{
+int pid; int prio; int btime; int ctime; int ttime; int wtime; }p[10],temp;
+void main(){
+int n; float ttat,twt; p[0].ctime=0;
+printf("Enter the number of process");
+scanf("%d",&n);
+for(int i=1;i<=n;i++){
+p[i].pid=i;
+printf("Enter the burst time of P%d : ",i);
+scanf("%d",&p[i].btime);
+printf("\n Enter the priority of P%d : ",i);
+scanf("%d",&p[i].prio); }
+for(int i=1;i<n;i++){ for(int j=i+1;j<=n;j++){
+if(p[i].prio>p[j].prio){
+temp=p[i];
+p[i]=p[j];
+p[j]=temp; } } }
+for(int i=1;i<=n;i++){
+p[i].ctime=p[i].btime+p[i-1].ctime;
+p[i].ttime=p[i].ctime;
+ttat=ttat+p[i].ttime;
+p[i].wtime=p[i].ttime-p[i].btime;
+twt=twt+p[i].wtime; }
+printf("\n pid \t priority\t Btime \t ctime \t tat \t wating \t \n");
+for(int i=1;i<=n;i++){
+printf("\n %d \t %d \t %d \t %d \t %d \t %d \t \n
+",p[i].pid,p[i].prio,p[i].btime,p[i].ctime,p[i].ttime,p[i].wtime);}
+printf("\n Average TurnAroundTime %f \n Average Waiting Time %f\n",ttat/n,twt/n);}
+
+
+Sjf
+struct sjf{
+int pid; int atime; int btime; int ctime; int tat; int wtime; }p[10],temp;
+void main(){
+int n; float ttat=0,twt=0;
+printf("Enter the number of process");
+scanf("%d",&n);
+for(int i=1;i<=n;i++){p[i].pid=i;
+p[i].atime=0;
+printf("Enter the burst time of P%d",i);
+scanf("%d",&p[i].btime); }
+for(int i=1;i<n;i++){ for(int j=i+1;j<=n;j++) {
+if(p[i].btime>p[j].btime){
+temp=p[i];
+p[i]=p[j];
+p[j]=temp; } } }
+p[0].wtime=0; p[0].ctime=0;
+for(int i=1;i<=n;i++){
+p[i].ctime=p[i].btime+p[i-1].ctime;
+p[i].tat=p[i].ctime-p[i].atime;
+ttat=p[i].tat+ttat;
+p[i].wtime=p[i].tat-p[i].btime;
+twt=p[i].wtime+twt; }
+printf("\n pid \t atime \t Btime \t ctime \t tat \t wating \t \n");
+for(int i=1;i<=n;i++){
+printf("\n %d \t %d \t %d \t %d \t %d \t %d \t \n
+",p[i].pid,p[i].atime,p[i].btime,p[i].ctime,p[i].tat,p[i].wtime); }
+printf("\n Average TurnAroundTime %f \n Average Waiting Time %f\n",ttat/n,twt/n); }
+
+
+FCFS
+#include<stdio.h> #include<stdio.h>
+struct fcfs{ int pid; int atime; int btime; int ctime; int tat; int wtime; }p[10];
+void main(){int n;
+int ttat=0,twt=0,atat,awt;
+printf("\n Enter the number of process \n");
+scanf("%d",&n);
+for(int i=1;i<=n;i++){
+p[i].pid=i;
+printf("\n Enter the arrival time %d ",i);
+scanf("%d",&p[i].atime);
+printf("\n Enter the burst time of %d",i);
+scanf("%d",&p[i].btime);
+}p[0].wtime=0;
+p[0].ctime=0;
+for(int i=1;i<=n;i++){
+p[i].ctime=p[i].btime+p[i-1].ctime;
+p[i].tat=p[i].ctime-p[i].atime;
+ttat=p[i].tat+ttat;
+p[i].wtime=p[i].tat-p[i].btime;
+twt=p[i].wtime+twt; }
+printf("\n --------------------Table is ---------------------\n ");
+printf("\n pid \t atime \t Btime \t ctime \t tat \t wating \t \n");
+for(int i=1;i<=n;i++){
+printf("\n %d \t %d \t %d \t %d \t %d \t %d \t \n
+",p[i].pid,p[i].atime,p[i].btime,p[i].ctime,p[i].tat,p[i].wtime);}
+printf("\n Average TurnAroundTime %d \n Average Waiting Time %d\n",ttat/n,twt/n); }
+
+
+DISK
+====
+
+FCFS
+
+#include <stdio.h>
+#include <math.h>
+int size = 8;
+void FCFS(int arr[],int head)
+{
+ int seek_count = 0;
+ int cur_track, distance;
+ for(int i=0;i<size;i++)
+ {
+ cur_track = arr[i];
+ distance = fabs(head - cur_track);
+ seek_count += distance;
+ head = cur_track;
+ }
+ printf("Total number of seek operations: %d\n",seek_count);
+ printf("Seek Sequence is\n");
+ for (int i = 0; i < size; i++) {
+ printf("%d\n",arr[i]);
+ }
+}
+Void main()
+{
+ int arr[8] = { 176, 79, 34, 60, 92, 11, 41, 114 };
+ int head = 50;
+ FCFS(arr,head);
+}
+
+
+SCAN
+
+
+#include<stdio.h>
+int n,m,i,j,h,p,temp,k,total=0;
+int t[100],a[100],diff;
+void main()
+{
+ printf("ENTER THE NUMBER OF TRACKS : ");
+ scanf("%d",&n);
+ printf("ENTER THE HEAD POINTER POSITION : ");
+ scanf("%d",&h);
+ printf("ENTER THE TRACKS TO BE TRAVERSED : ");
+ for(i=0;i<n;i++)
+ {
+ scanf("%d",&t[i]);
+ }
+ t[n+2] = 199;
+ t[n+1] = 0;
+ t[n] = h;
+ n=n+3;
+ for(i=0;i<n;i++) {
+ for(j=0;j<n-i-1;j++){
+ if(t[j]>t[j+1]){
+ temp=t[j];
+ t[j]=t[j+1];
+ t[j+1]=temp;
+ } } }
+ for(i=0;i<n;i++){
+ if(t[i]==h){
+ k=i;
+ break; }
+ }
+ if(h<(199-h)){
+ for(i=k;i>=0;i--,p++){
+ a[p]=t[i];}
+ for(i=k+1;i<n-1;i++,p++){
+a[p]=t[i];
+ } }
+ else {
+ for(i=k;i<n;i++,p++){
+ a[p]=t[i];}
+ for(i=k-1;i>=0;i--,p++){
+ a[p]=t[i];}
+ }
+ printf("TRAVERSED ORDER : ");
+ for(i=0;i<p;i++){
+ printf("%d => ",a[i]);
+ }
+ for(total=0,j=0;j<p-1;j++){
+ diff=0;
+ if(a[j]>a[j+1]){
+ diff=a[j]-a[j+1]; }
+ else{
+ diff=a[j+1]-a[j]; }
+ total=total+diff;
+ }
+ printf("\b\b\b. \nTOTAL HEAD MOVEMENTS : %d\n",total);
+}
+
+
+
+
+CSCAN
+
+
+#include<stdio.h>
+int main()
+{
+ int queue[20],n,head,i,j,k,seek=0,max,diff,temp,queue1[20],queue2[20],
+ temp1=0,temp2=0;
+ float avg;
+ printf("Enter the max range of disk\n");
+ scanf("%d",&max);
+ printf("Enter the initial head position\n");
+ scanf("%d",&head);
+ printf("Enter the size of queue request\n");
+ scanf("%d",&n);
+ printf("Enter the queue of disk positions to be read\n");
+ for(i=1;i<=n;i++) {
+ scanf("%d",&temp);
+ if(temp>=head){
+ queue1[temp1]=temp;
+ temp1++;}
+ else{
+ queue2[temp2]=temp;
+ temp2++; }
+ }
+ for(i=0;i<temp1-1;i++) {
+ for(j=i+1;j<temp1;j++){
+ if(queue1[i]>queue1[j]){
+ temp=queue1[i];
+ queue1[i]=queue1[j];
+ queue1[j]=temp; } }
+ }
+ for(i=0;i<temp2-1;i++){
+ for(j=i+1;j<temp2;j++){
+ if(queue2[i]>queue2[j]){
+ temp=queue2[i];
+queue2[i]=queue2[j];
+ queue2[j]=temp; }
+}
+ }
+ for(i=1,j=0;j<temp1;i++,j++)
+ queue[i]=queue1[j];
+ queue[i]=max;
+ queue[i+1]=0;
+ for(i=temp1+3,j=0;j<temp2;i++,j++)
+ queue[i]=queue2[j];
+ queue[0]=head;
+ for(j=0;j<=n+1;j++){
+ diff=abs(queue[j+1]-queue[j]);
+ seek+=diff;
+ printf(" %d -> ",queue[j]);
+ }
+ printf("\n Total seek time is %d\n",seek);
+ avg=seek/(float)n;
+ printf("Average seek time is %f\n",avg);
+ return 0;
+}
